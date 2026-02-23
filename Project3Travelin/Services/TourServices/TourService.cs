@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MongoDB.Driver;
 using Project3Travelin.Dtos.TourDtos;
 using Project3Travelin.Entities;
@@ -34,6 +34,24 @@ namespace Project3Travelin.Services.TourServices
         {
             var values = await _tourCollection.Find(tour => true).ToListAsync();
             return _mapper.Map<List<ResultTourDto>>(values);
+        }
+
+        public async Task<PaginatedTourResultDto> GetPaginatedToursAsync(int page, int pageSize)
+        {
+            var totalCount = await _tourCollection.CountDocumentsAsync(tour => true);
+            var tours = await _tourCollection.Find(tour => true)
+                .Skip((page - 1) * pageSize)
+                .Limit(pageSize)
+                .ToListAsync();
+
+            return new PaginatedTourResultDto
+            {
+                Tours = _mapper.Map<List<ResultTourDto>>(tours),
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                TotalCount = (int)totalCount,
+                PageSize = pageSize
+            };
         }
 
         public async Task<GetTourByIdDto> GetTourByIdAsync(string id)
