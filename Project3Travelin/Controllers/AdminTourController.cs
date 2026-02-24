@@ -1,12 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Project3Travelin.Dtos.TourDtos;
+using Project3Travelin.Services.TourServices;
 
 namespace Project3Travelin.Controllers
 {
     public class AdminTourController : Controller
     {
-        public IActionResult TourList()
+        private readonly ITourService _tourService;
+        public AdminTourController(ITourService tourService)
+        {
+            _tourService = tourService;
+        }
+        public async Task<IActionResult> TourList()
+        {
+            var tours = await _tourService.GetAllToursAsync();
+            return View(tours);
+        }
+        [HttpGet]
+        public IActionResult CreateTour()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateTour(CreateTourDto createTourDto)
+        {
+
+            await _tourService.CreateTourAsync(createTourDto);
+            return RedirectToAction("TourList");
+        }
+
+        public async Task<IActionResult> DeleteTour(string id)
+        {
+            await _tourService.DeleteTourAsync(id);
+            return RedirectToAction("TourList");
+        }
+
+        public async Task<IActionResult> UpdateTour(string id)
+        {
+            var tour = await _tourService.GetTourByIdAsync(id);
+            return View(tour);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateTour(UpdateTourDto updateTourDto)
+        {
+            await _tourService.UpdateTourAsync(updateTourDto);
+            return RedirectToAction("TourList");
         }
     }
 }
