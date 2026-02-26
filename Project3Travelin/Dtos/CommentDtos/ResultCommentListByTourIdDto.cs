@@ -1,12 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace Project3Travelin.Entities
+﻿namespace Project3Travelin.Dtos.CommentDtos
 {
-    public class Comment
+    public class ResultCommentListByTourIdDto
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string CommentId { get; set; }
         public string HeadLine { get; set; }
         public string CommentDetail { get; set; }
@@ -14,6 +9,5 @@ namespace Project3Travelin.Entities
         public DateTime CommentDate { get; set; }
         public bool IsStatus { get; set; }
         public string TourId { get; set; }
-
     }
 }

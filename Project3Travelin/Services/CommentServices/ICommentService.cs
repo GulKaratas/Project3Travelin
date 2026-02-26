@@ -9,5 +9,7 @@ namespace Project3Travelin.Services.CommentServices
         Task CreateComment(CreateCommentDto createCommentDto);
         Task UpdateComment(UpdateCommentDto updateCommentDto);
         Task DeleteComment(string id);
+
+        Task<List<ResultCommentListByTourIdDto>> GetCommentsByTourId(string id);
     }
 }
